@@ -1,0 +1,211 @@
+<div class="page-content" ng-controller="homeCtrl">
+  <div class="row">
+    <!--<div class="col-md-2">
+      <div class="sidebar content-box" style="display: block;">
+        <ul class="nav">
+          &lt;!&ndash; Main menu &ndash;&gt;
+          <li class="text-center">jf(function , args)</li>
+          <li class="text-center">jinverse(matrix)</li>
+          <li class="text-center">jmultiply(Matrix , Matrix)</li>
+          <li class="text-center">jsubtract(Matrix , Matrix)</li>
+          <li class="text-center">jnorma(Vector , Vector)</li>
+          <li class="text-center">jderivative(f, abc)</li>
+        </ul>
+      </div>
+    </div>-->
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 panel-warning">
+              <div class="content-box-header panel-heading">
+                <div class="panel-title ">Select the methods</div>
+              </div>
+              <div class="content-box-large box-with-header">
+
+                <div class="form-group">
+                  <label for="usr">Method:</label>
+                  <select  class="form-control" ng-options="method as method.name for method in adminListMethods" ng-model="selectedMethod"></select>
+                </div>
+
+                <div class="form-group">
+                  <label for="pwd">Your Method: </label>
+                  <select  class="form-control"  ng-options="method as method.name for method in myListMethods" ng-model="selectedMyMethod"></select>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 panel-warning">
+          <div class="content-box-header panel-heading">
+            <div class="panel-title ">Documentation</div>
+          </div>
+          <div class="content-box-large box-with-header">
+            <p ng-if="!selectedMethod || !selectedMyMethod">Select the methods that you are going to compare</p>
+            <div ng-if="selectedMethod && selectedMyMethod">
+              <legend>Method</legend>
+              <p ng-bind-html="selectedMethod.notes"></p>
+              <legend>My Method</legend>
+              <p ng-bind-html="selectedMyMethod.notes"></p>
+              <legend/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 terminal-block">
+        <div class="col-xs-6 ">
+          <div class="col-xs-12 header-terminal">
+            <span class="label label-info">My methods</span><span style="margin-left: 5px" class="label label-danger" ng-click="clearTerminalMyResult()">clear</span>
+          </div>
+          <div class="col-xs-12 terminal">
+            <p ng-bind-html="myResult"></p>
+          </div>
+          <div class="col-xs-10">
+            <input class="form-control" ng-model="myText" style="margin-bottom: 5px"  placeholder="....."/>
+          </div>
+          <div class="col-xs-1">
+            <button class="btn btn btn-success" ng-click="userRule()">Send</button>
+          </div>
+        </div>
+
+        <div class="col-xs-6">
+          <div class="col-xs-12 header-terminal">
+            <span class="label label-info">TestingMaths methods</span><span style="margin-left: 5px" ng-click="clearTerminalAdminResult()" class="label label-danger">clear</span>
+          </div>
+          <div class="col-xs-12 terminal">
+            <p ng-bind-html="result"></p>
+          </div>
+          <div class="col-xs-10">
+            <input class="form-control" ng-model="text" style="margin-bottom: 5px" placeholder="....."/>
+          </div>
+          <div class="col-xs-1">
+            <button class="btn btn btn-success" ng-click="adminRule()">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="col-md-12 panel-warning">
+          <div class="content-box-header panel-heading" style="margin-top: 35px">
+            <div class="panel-title ">Create pdf and send to verify</div>
+          </div>
+          <div class="content-box-large box-with-header">
+            <button class="btn btn-info" style="width: 100%" ng-click="createPdf()">Create pdf</button>
+
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Date</th>
+                  <th>Name Method</th>
+                  <th class="text-center">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="pdf in myPdfFiles track by $index">
+                  <td>{{$index + 1}}</td>
+                  <td>{{pdf.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  <td><a href="/images/pdf/{{pdf.id}}.pdf">{{pdf.nameMethod}}</a></td></a>
+                  <td class="text-center">
+                    <span ng-if="pdf.status == 'pending'" class="label label-info">{{pdf.status}}</span>
+                    <span ng-if="pdf.status == 'approved'" class="label label-success">{{pdf.status}}</span>
+                    <span ng-if="pdf.status == 'denied'" class="label label-danger">{{pdf.status}}</span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 panel-warning">
+          <div class="content-box-header panel-heading" >
+            <div class="panel-title ">Additional functions</div>
+          </div>
+          <div class="content-box-large box-with-header">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th>№</th>
+                <th>Name</th>
+                <th>Example</th>
+                <th>Return</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>1</td>
+                <td>jf(f,obj)</td>
+                <td>jf('-4*x - 2*y+x^2+y^2 + 5',{x:2,y:1})</td>
+                <td>Number</td>
+              </tr>
+
+              <tr>
+                <td>2</td>
+                <td>jinverse(matrix)</td>
+                <td>jinverse([[1,2,3],[3,4,3],[3,4,5]])</td>
+                <td>Matrix</td>
+              </tr>
+
+              <tr>
+                <td>3</td>
+                <td>jmultiply(Matrix , Matrix)</td>
+                <td>jmultiply([[1,2,3],[3,4,5],[4,5,6]] , [[1,2,3],[3,4,5],[4,5,6]])</td>
+                <td>Matrix</td>
+              </tr>
+
+              <tr>
+                <td>4</td>
+                <td>jsubtract(Matrix , Matrix)</td>
+                <td>jsubtract([[1,2,3],[3,4,5],[4,5,6]] , [[1,2,3],[3,4,5],[4,5,6]])</td>
+                <td>Matrix</td>
+              </tr>
+
+              <tr>
+                <td>5</td>
+                <td>jnorma(Vector , Vector)</td>
+                <td>jnorma([1,2,3,4,5] , [1,2,3,4,5])</td>
+                <td>Number</td>
+              </tr>
+
+              <tr>
+                <td>6</td>
+                <td>jderivative(f, abc)</td>
+                <td>jderivative('-4*x - 2*y+x^2+y^2 + 5',['x','y'])</td>
+                <td>Vector</td>
+              </tr>
+
+              <tr>
+                <td>7</td>
+                <td>jsplitDifference(vectorFxy..,Vector1,Vector2, abc)</td>
+                <td>jsplitDifference(['2 * x - 4','2 * (y - 1)'],[0,0],[0.1,0.1],['x','y'])</td>
+                <td>Matrix</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <br/>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<footer class="footer">
+  <div class="container">
+
+    <div class="copy text-center">
+      C&copy; 2017 <a href='#'>TestingMaths</a>
+    </div>
+
+  </div>
+</footer>
